@@ -1,0 +1,1 @@
+# Fundamental metric for evaluating Text2Img models
