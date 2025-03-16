@@ -92,12 +92,12 @@ class CLIPImageImageSimilarity(torchmetrics.Metric):
 if __name__ == "__main__":
     text_image_similarity = CLIPTextImageSimilarity()
     text = "A photo of a cat"
-    images = [Image.open("../../data/example.png").convert("RGB")]
+    images = [Image.open("./data/example.png").convert("RGB")]
     text_image_similarity.update(text, images)
     print("Text-to-Image Similarity:", text_image_similarity.compute().item())
 
     image_image_similarity = CLIPImageImageSimilarity()
-    src_images = [Image.open("../../data/example1.png").convert("RGB")]
-    gen_images = [Image.open("../../data/example2.png").convert("RGB")]
+    src_images = [Image.open("./data/example1.png").convert("RGB")]
+    gen_images = [Image.open("./data/example2.png").convert("RGB")]
     image_image_similarity.update(src_images, gen_images)
     print("Image-to-Image Similarity:", image_image_similarity.compute().item())

@@ -1,0 +1,9 @@
+services:
+  main:
+    build:
+      context: .
+      tags: 
+        - "fundamental-metrics:main"
+    container_name: fundamental-metrics
+    network_mode: host
+
