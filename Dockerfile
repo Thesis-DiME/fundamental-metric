@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y git
 COPY . .
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-  pip install -r requirements.txt
+ chmod u+x ./setup.sh && ./setup.sh
 
-CMD [ "python", "./src/metrics/clip_score.py" ]
+#CMD [ "python", "main.py" ]
+CMD [ "python", "src/metrics/clip_score.py" ]
 

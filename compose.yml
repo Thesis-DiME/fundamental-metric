@@ -1,5 +1,5 @@
 services:
-  main:
+  fundamental-metric:
     build:
       context: .
       tags: 
