@@ -1,35 +1,19 @@
 import torch
-import numpy as np
-from PIL import Image
-import torchmetrics
 from torchmetrics.image.inception import InceptionScore
-from torchvision.transforms import Compose, Resize
-
-from utils import create_dummy_image
+from typing import Dict
 
 
-class InceptionScoreMetric(torchmetrics.Metric):
-    def __init__(self, splits: int = 10, **kwargs) -> None:
+class InceptionScoreMetric(InceptionScore):
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.inception_score = InceptionScore(splits=splits)
-        self._transform = Compose(
-            [
-                Resize((299, 299)),
-                lambda img: torch.from_numpy(np.array(img)).permute(2, 0, 1),
-            ]
+
+    def update_images(self, images: torch.Tensor) -> None:
+        assert torch.max(images) <= 1.0 and torch.min(images) >= 0, (
+            "Images must have pixel values in the range [0, 1]."
         )
+        preprocessed_images = (images * 255).to(torch.uint8)
+        self.update(preprocessed_images)
 
-    def update(self, images: list[Image.Image]) -> None:
-        processed = torch.stack([self._transform(img) for img in images])
-        self.inception_score.update(processed.to(torch.uint8))
-
-    def compute(self) -> torch.Tensor:
-        return self.inception_score.compute()
-
-
-if __name__ == "__main__":
-    sample_images = [create_dummy_image() for _ in range(10)]
-    metric = InceptionScoreMetric()
-    metric.update(sample_images)
-    result = metric.compute()
-    print(f"Inception Score: {result}")
+    def compute(self) -> Dict[str, float]:
+        inception_mean, inception_std = super().compute()
+        return {"inception_mean": inception_mean, "inception_std": inception_std}
