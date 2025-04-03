@@ -3,6 +3,10 @@ from omegaconf import DictConfig
 
 import torch
 import clip
+import json
+from torchvision import transforms
+import os
+from PIL import Image
 
 
 class MetricsPipeline:
@@ -16,14 +20,28 @@ class MetricsPipeline:
 
 
     def load_data(self):
-        real_images = torch.rand(10, 3, 256, 256).to(self.device)
-        generated_images = torch.rand(10, 3, 256, 256).to(self.device)
-        text_tokens = clip.tokenize(["A cat in space"] * 10).to(self.device)
         
+        metadata_path = '/home/naumov/code/general-pipeline/data/generated_images/stable-diffusion-v1-5-stable-diffusion-v1-5/2/metadata.json'
+        with open(metadata_path, 'r') as f:
+            metadata = json.load(f)
+        
+        real_tensors = []
+        text_tokens = []
+        
+        for data in metadata:
+            try:
+                image = Image.open(data['img_path']).convert('RGB')
+            except Exception as e:
+                print(f"Error loading image at {data['img_path']}: {e}")
+                continue
+            
+            real_tensors.append(image)
+            text_tokens.append(data['prompt'])
+
         return {
-            "real_images": real_images,
-            "generated_images": generated_images,
-            "text_tokens": text_tokens
+            "real_images": real_tensors,
+            "text_tokens": text_tokens,
+            "generated_images": real_tensors
         }
 
     def compute_metrics(self):

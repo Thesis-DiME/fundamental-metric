@@ -3,6 +3,8 @@ from torch import Tensor
 import torch.nn.functional as F
 from torchmetrics import Metric
 import clip
+from typing import List
+from PIL import Image
 
 
 class CLIPSimilarity(Metric):
@@ -21,31 +23,25 @@ class CLIPSimilarity(Metric):
         assert mode in ['text_image', 'image_image'], "Mode must be 'text_image' or 'image_image'"
         self.mode = mode
         
-        self.model, _ = clip.load(model_name)
+        self.model, self.preprocess = clip.load(model_name)
         self.model.eval()
         
         self.add_state("similarities", default=[], dist_reduce_fx="cat")
         self.add_state("count", default=torch.tensor(0), dist_reduce_fx="sum")
     
-    def _prepare_images(self, images: Tensor) -> Tensor:
-        if images.max() > 1.0:
-            images = images / 255.0
-            
-        images = F.interpolate(images, size=(224, 224), mode='bilinear')
-        
-        mean = torch.tensor([0.48145466, 0.4578275, 0.40821073], device=self.device)
-        std = torch.tensor([0.26862954, 0.26130258, 0.27577711], device=self.device)
-        images = (images - mean[None, :, None, None]) / std[None, :, None, None]
-        
-        return images
+    def _prepare_images(self, images: List[Image.Image]) -> Tensor: 
+        return torch.stack([self.preprocess(img) for img in images]).to(self.device).float()
 
-    def _prepare_text(self, text_tensors: Tensor) -> Tensor:
-        return self.model.encode_text(text_tensors)
+    def _prepare_text(self, text_list: List[str]) -> Tensor:
+        text_tokens = clip.tokenize(text_list).to(self.device)
+        text_features = self.model.encode_text(text_tokens)
+        
+        return text_features.float()
     
     def update(
         self,
-        sources: Tensor,
-        targets: Tensor
+        sources: List[str],
+        targets: List[Image.Image]
     ) -> None:
 
         if self.mode == 'text_image':
