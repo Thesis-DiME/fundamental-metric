@@ -1,0 +1,24 @@
+defaults:
+  - metrics/clip_score@clip  # Load CLIP config
+  - metrics/fid_score@fid    # Load FID config
+  - metrics/inception_score@inception
+  - _self_
+
+metrics:
+  clip:
+    _target_: metrics.clip_score.CLIPSimilarity
+    mode: text_image
+    model_name: ViT-B/32
+
+  fid:
+    _target_: metrics.fid_score.FIDMetric
+    feature: 2048
+
+  inception:
+    _target_: metrics.inception_score.InceptionScoreMetric
+
+model_name: sd15
+device: cuda
+csv_path: output1.csv
+save_path: output1.json
+metadata_path: ./data/generated_images/sd1.5/2025-05-28_23-31-31/metadata.json
