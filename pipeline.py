@@ -6,6 +6,7 @@ import json
 from PIL import Image
 import pandas as pd
 import os
+from pathlib import Path
 
 
 class FundamentalMetricsPipeline:
@@ -27,7 +28,10 @@ class FundamentalMetricsPipeline:
 
         for data in metadata:
             try:
-                image = Image.open(data["img_path"]).convert("RGB")
+                metadata_path = Path(self.cfg.metadata_path)
+                image = Image.open(metadata_path.parent / data["img_path"]).convert(
+                    "RGB"
+                )
             except Exception as e:
                 print(f"Error loading image at {data['img_path']}: {e}")
                 continue
@@ -44,11 +48,13 @@ class FundamentalMetricsPipeline:
         }
 
     def initialize_csv(self, data):
+        """Create CSV if it doesn't exist."""
         if not os.path.exists(self.cfg.csv_path):
             df = pd.DataFrame(
                 {"img_path": data["img_paths"], "prompt": data["text_tokens"]}
             )
             df.to_csv(self.cfg.csv_path, index=False)
+            print(f"[✔] Initialized CSV at {self.cfg.csv_path}")
 
     def compute_individual_metrics(self):
         data = self.load_data()

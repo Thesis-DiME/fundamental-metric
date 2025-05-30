@@ -1,0 +1,2 @@
+_target_: metrics.clip_score.CLIPSimilarity
+model_name: ViT-B/32

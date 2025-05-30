@@ -1,0 +1,2 @@
+_target_: metrics.fid_score.FIDMetric
+feature: 2048

@@ -21,4 +21,4 @@ model_name: sd15
 device: cuda
 csv_path: output1.csv
 save_path: output1.json
-metadata_path: ./data/generated_images/sd1.5/2025-05-28_23-31-31/metadata.json
+metadata_path: /home/dmitrii/code/general-pipeline/submodules/DiffusionEngine/data/generated_images/sd1.5/2025-05-30_18-02-28/metadata.json

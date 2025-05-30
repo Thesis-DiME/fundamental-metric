@@ -6,13 +6,4 @@ services:
         - "fundamental-metrics:main"
     container_name: fundamental-metrics
     network_mode: host
-    volumes:
-      - type: volume
-        source: results
-        target: /results
-      - type: volume
-        source: data
-        target: /data
-      # - type: volume
-      #   source: conf
-      #   target: /app/conf
+
