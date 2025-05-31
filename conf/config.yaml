@@ -10,9 +10,9 @@ metrics:
     mode: text_image
     model_name: ViT-B/32
 
-  fid:
-    _target_: metrics.fid_score.FIDMetric
-    feature: 2048
+  # fid:
+  #   _target_: metrics.fid_score.FIDMetric
+  #   feature: 2048
 
   inception:
     _target_: metrics.inception_score.InceptionScoreMetric
@@ -21,4 +21,4 @@ model_name: sd15
 device: cuda
 csv_path: output1.csv
 save_path: output1.json
-metadata_path: /home/dmitrii/code/general-pipeline/submodules/DiffusionEngine/data/generated_images/sd1.5/2025-05-30_18-02-28/metadata.json
+metadata_path: /app/data/generated_images/sd-legacy_stable-diffusion-v1-5/ivan_007/metadata.json
