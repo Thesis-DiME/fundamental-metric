@@ -10,9 +10,9 @@ metrics:
     mode: text_image
     model_name: ViT-B/32
 
-  # fid:
-  #   _target_: metrics.fid_score.FIDMetric
-  #   feature: 2048
+  fid:
+    _target_: metrics.fid_score.FIDMetric
+    feature: 2048
 
   inception:
     _target_: metrics.inception_score.InceptionScoreMetric

@@ -5,6 +5,7 @@ import os
 from hydra.utils import get_original_cwd
 
 from pipeline import FundamentalMetricsPipeline
+import time
 
 
 @hydra.main(config_path="conf", config_name="config")
@@ -37,4 +38,6 @@ def main(cfg: DictConfig):
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     main()
+    print(f"FUNDAMENTAL METRICS TIME: {time.time()-start_time}")
