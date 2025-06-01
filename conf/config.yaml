@@ -21,4 +21,4 @@ model_name: sd15
 device: cuda
 csv_path: output1.csv
 save_path: output1.json
-metadata_path: /app/data/generated_images/stabilityai_stable-diffusion-xl-base-1.0/ivan_007/metadata.json
+metadata_path: /app/data/generated_images/kandinsky-community_kandinsky-2-2-decoder/ivan_007/metadata.json
