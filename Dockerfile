@@ -11,6 +11,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 COPY . .
 
-#CMD [ "python", "main.py" ]
-CMD [ "python", "src/metrics/clip_score.py" ]
+CMD [ "python", "main.py" ]
+# CMD [ "python", "src/metrics/clip_score.py" ]
 
